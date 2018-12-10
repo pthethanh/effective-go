@@ -12,4 +12,4 @@ List of effective go and go idiomatics that I found useful while learning Go. Pl
 9. [Go best practices - Peter Bourgon](https://peter.bourgon.org/go-best-practices-2016/)
 10. [Twelve Go Best Practices -Francesc Campoy Flores](https://talks.golang.org/2013/bestpractices.slide#1)
 11. [Don’t use Go’s default HTTP client in production](https://medium.com/@nate510/don-t-use-go-s-default-http-client-4804cb19f779)
-
+12. [Go project layout](https://medium.com/golang-learn/go-project-layout-e5213cdcfaa2)
