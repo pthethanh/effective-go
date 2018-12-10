@@ -1,5 +1,5 @@
 # effective-go
-list of effective go and go idiomatics
+List of effective go and go idiomatics that I found useful while learning Go. Please create pull request if you found any other best practices, good links,...
 
 1. [Effective Go](https://golang.org/doc/effective_go.html)
 2. [Go Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments)
