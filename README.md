@@ -91,7 +91,7 @@ For more discussion about nil in Go see Francesc Campoy's talk [Understanding Ni
 
 Do not use package `math/rand` to generate keys, even throwaway ones. Unseeded, the generator is completely predictable. Seeded with `time.Nanoseconds()`, there are just a few bits of entropy. Instead, use `crypto/rand`'s Reader, and if you need text, print to hexadecimal or base64:
 
-```
+```go
 import (
     "crypto/rand"
     // "encoding/base64"
@@ -154,7 +154,7 @@ Avoid renaming imports except to avoid a name collision; good package names shou
 
 Imports are organized in groups, with blank lines between them. The standard library packages are always in the first group.
 
-```
+```go
 package main
 
 import (
@@ -176,7 +176,7 @@ import (
 
 The import . form can be useful in tests that, due to circular dependencies, cannot be made part of the package being tested:
 
-```
+```go
 package foo_test
 
 import (
@@ -191,7 +191,7 @@ In this case, the test file cannot be in package foo because it uses bar/testuti
 
 In C and similar languages, it's common for functions to return values like -1 or null to signal errors or missing results:
 
-```
+```go
 // Lookup returns the value for key or "" if there is no mapping for key.
 func Lookup(key string) string
 
@@ -201,20 +201,20 @@ Parse(Lookup(key))  // returns "parse failure for value" instead of "no value fo
 
 Go's support for multiple return values provides a better solution. Instead of requiring clients to check for an in-band error value, a function should return an additional value to indicate whether its other return values are valid. This return value may be an error, or a boolean when no explanation is needed. It should be the final return value.
 
-```
+```go
 // Lookup returns the value for key or ok=false if there is no mapping for key.
 func Lookup(key string) (value string, ok bool)
 ```
 
 This prevents the caller from using the result incorrectly:
 
-```
+```go
 Parse(Lookup(key))  // compile-time error
 ```
 
 And encourages more robust and readable code:
 
-```
+```go
 value, ok := Lookup(key)
 if !ok  {
     return fmt.Errorf("no value for %q", key)
@@ -232,7 +232,7 @@ Some standard library functions, like those in package "strings", return in-band
 
 Try to keep the normal code path at a minimal indentation, and indent the error handling, dealing with it first. This improves the readability of the code by permitting visually scanning the normal path quickly. For instance, don't write:
 
-```
+```go
 if err != nil {
 	// error handling
 } else {
@@ -242,7 +242,7 @@ if err != nil {
 
 Instead, write:
 
-```
+```go
 if err != nil {
 	// error handling
 	return // or continue, etc.
@@ -252,7 +252,7 @@ if err != nil {
 
 If the `if` statement has an initialization statement, such as:
 
-```
+```go
 if x, err := f(); err != nil {
 	// error handling
 	return
@@ -263,7 +263,7 @@ if x, err := f(); err != nil {
 
 then this may require moving the short variable declaration to its own line:
 
-```
+```go
 x, err := f()
 if err != nil {
 	// error handling
@@ -288,7 +288,7 @@ Do not define interfaces on the implementor side of an API "for mocking"; instea
 
 Do not define interfaces before they are used: without a realistic example of usage, it is too difficult to see whether an interface is even necessary, let alone what methods it ought to contain.
 
-```
+```go
 package consumer  // consumer.go
 
 type Thinger interface { Thing() bool }
@@ -313,7 +313,7 @@ func NewThinger() Thinger { return defaultThinger{ … } }
 
 Instead return a concrete type and let the consumer mock the producer implementation.
 
-```
+```go
 package producer
 
 type Thinger struct{ … }
@@ -342,27 +342,27 @@ Also see [Initialisms](https://github.com/golang/go/wiki/CodeReviewComments#init
 
 Consider what it will look like in godoc. Named result parameters like:
 
-```
+```go
 func (n *Node) Parent1() (node *Node)
 func (n *Node) Parent2() (node *Node, err error)
 ```
 
 will stutter in godoc; better to use:
 
-```
+```go
 func (n *Node) Parent1() *Node
 func (n *Node) Parent2() (*Node, error)
 ```
 
 On the other hand, if a function returns two or three parameters of the same type, or if the meaning of a result isn't clear from context, adding names may be useful in some contexts. Don't name result parameters just to avoid declaring a var inside the function; that trades off a minor implementation brevity at the cost of unnecessary API verbosity.
 
-```
+```go
 func (f *Foo) Location() (float64, float64, error)
 ```
 
 is less clear than:
 
-```
+```go
 // Location returns f's latitude and longitude.
 // Negative values mean south and west, respectively.
 func (f *Foo) Location() (lat, long float64, err error)
@@ -380,7 +380,7 @@ See [Named Result Parameters](https://github.com/golang/go/wiki/CodeReviewCommen
 
 Package comments, like all comments to be presented by godoc, must appear adjacent to the package clause, with no blank line.
 
-```
+```go
 // Package math provides basic constants and mathematical functions.
 package math
 /*
@@ -393,42 +393,42 @@ package template
 
 For "package main" comments, other styles of comment are fine after the binary name (and it may be capitalized if it comes first), For example, for a `package main` in the directory `seedgen` you could write:
 
-```
+```go
 // Binary seedgen ...
 package main
 ```
 
 or
 
-```
+```go
 // Command seedgen ...
 package main
 ```
 
 or
 
-```
+```go
 // Program seedgen ...
 package main
 ```
 
 or
 
-```
+```go
 // The seedgen command ...
 package main
 ```
 
 or
 
-```
+```go
 // The seedgen program ...
 package main
 ```
 
 or
 
-```
+```go
 // Seedgen ..
 package main
 ```
@@ -476,7 +476,7 @@ If callers need more concurrency, they can add it easily by calling the function
 
 Tests should fail with helpful messages saying what was wrong, with what inputs, what was actually got, and what was expected. It may be tempting to write a bunch of assertFoo helpers, but be sure your helpers produce useful error messages. Assume that the person debugging your failing test is not you, and is not your team. A typical Go test fails like:
 
-```
+```go
 if got != tt.want {
 	t.Errorf("Foo(%q) = %d; want %d", tt.in, got, tt.want) // or Fatalf, if test can't test anything more past this point
 }
@@ -488,7 +488,7 @@ If that seems like a lot of typing, you may want to write a [table-driven test](
 
 Another common technique to disambiguate failing tests when using a test helper with different input is to wrap each caller with a different TestFoo function, so the test fails with that name:
 
-```
+```go
 func TestSingleValue(t *testing.T) { testHelper(t, []int{80}) }
 func TestNoValues(t *testing.T)    { testHelper(t, []int{}) }
 ```
@@ -595,7 +595,7 @@ Read more about this at:
 1. [Don't use default http client](https://medium.com/@nate510/don-t-use-go-s-default-http-client-4804cb19f779)
 2. [The complete guide to golang http timeout](https://blog.cloudflare.com/the-complete-guide-to-golang-net-http-timeouts/)
 
-## References:
+## References
 
 1. [Effective Go](https://golang.org/doc/effective_go.html)
 2. [Go Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments)
