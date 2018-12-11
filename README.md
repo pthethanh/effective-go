@@ -172,21 +172,6 @@ import (
 
 [goimports](https://godoc.org/golang.org/x/tools/cmd/goimports) will do this for you.
 
-## Import Dot
-
-The import . form can be useful in tests that, due to circular dependencies, cannot be made part of the package being tested:
-
-```go
-package foo_test
-
-import (
-	"bar/testutil" // also imports "foo"
-	. "foo"
-)
-```
-
-In this case, the test file cannot be in package foo because it uses bar/testutil, which imports foo. So we use the 'import .' form to let the file pretend to be part of package foo even though it is not. Except for this one case, do not use import . in your programs. It makes the programs much harder to read because it is unclear whether a name like Quux is a top-level identifier in the current package or in an imported package.
-
 ## In-Band Errors
 
 In C and similar languages, it's common for functions to return values like -1 or null to signal errors or missing results:
