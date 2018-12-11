@@ -141,10 +141,27 @@ Try to keep concurrent code simple enough that goroutine lifetimes are obvious. 
 
 ## Handle Errors
 
-See <https://golang.org/doc/effective_go.html#errors>. Do not discard errors using `_` variables. If a function returns an error, check it to make sure the function succeeded. Handle the error, return it, or, in truly exceptional situations, panic.
+Do not discard errors using `_` variables. If a function returns an error, check it to make sure the function succeeded. Handle the error, return it, or, in truly exceptional situations, panic.
 
-Read more about error at following links:
+When checking an error, don't check for a specific text in error, check its type instead. Don't write:
+```go
+if strings.Contains(err.Error(), "timeout"){
+    // do something
+}
+```
 
+Instead, write:
+```go
+if nerr, ok := err.(net.Error); ok && nerr.Timeout() {
+    // do something
+}
+if err != nil {
+    log.Fatal(err)
+}
+```
+
+Read more about error at:
+1. [Effective Go - Errors](https://golang.org/doc/effective_go.html#errors)
 1. [Error handling and go](https://blog.golang.org/error-handling-and-go)
 2. [Errors are values](https://blog.golang.org/errors-are-values)
 
