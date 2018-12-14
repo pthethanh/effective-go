@@ -597,6 +597,70 @@ Read more about this at:
 1. [Don't use default http client](https://medium.com/@nate510/don-t-use-go-s-default-http-client-4804cb19f779)
 2. [The complete guide to golang http timeout](https://blog.cloudflare.com/the-complete-guide-to-golang-net-http-timeouts/)
 
+## Add context to errors
+
+Wrapping errors with a custom message provides context as it gets propagated up the stack. Make sure the root error is still accessible somehow for type checking.
+
+Don't write:
+
+```go
+file, err := os.Open("foo.txt")
+if err != nil {
+	return err
+}
+```
+
+Instead, write:
+
+```go
+import "github.com/pkg/errors"
+
+// ...
+
+file, err := os.Open("foo.txt")
+if err != nil {
+	return errors.Wrap(err, "failed to open foo.txt")
+}
+```
+## Avoid global variables
+
+Global variables make testing and readability hard. It also makes everyone in the same package can access it even they don't need it and should not able to access to it. The best practice is to set it as a dependency of a struct and use dependency injection to inject it whenever you need it (often in main.go)
+
+So, don't write:
+
+```go
+var db *sql.DB
+
+func main() {
+	db = // ...
+	http.HandleFunc("/drop", DropHandler)
+	// ...
+}
+
+func DropHandler(w http.ResponseWriter, r *http.Request) {
+	db.Exec("DROP DATABASE prod")
+}
+```
+
+Instead, use dependency injection to inject it into the struct:
+
+```go
+func main() {
+	db := // ...
+	handlers := Handlers{DB: db}
+	http.HandleFunc("/drop", handlers.DropHandler)
+	// ...
+}
+
+type Handlers struct {
+	DB *sql.DB
+}
+
+func (h *Handlers) DropHandler(w http.ResponseWriter, r *http.Request) {
+	h.DB.Exec("DROP DATABASE prod")
+}
+```
+
 ## References
 
 1. [Effective Go](https://golang.org/doc/effective_go.html)
