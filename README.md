@@ -160,6 +160,8 @@ if err != nil {
 }
 ```
 
+If you are using Go 1.13 afterward, better look at https://blog.golang.org/go1.13-errors. It offers a very nice way to wrap, check error.
+
 Read more about error at:
 1. [Effective Go - Errors](https://golang.org/doc/effective_go.html#errors)
 1. [Error handling and go](https://blog.golang.org/error-handling-and-go)
@@ -543,7 +545,7 @@ integration_test:
 
 docker: build
 	docker build -t $(DOCKER_IMAGE) .;\
-    rm -f $(PROJECT_NAME).bin 2> /dev/null; \
+        rm -f $(PROJECT_NAME).bin 2> /dev/null; \
 ```
 
 Once the Makefile is created, everyone just need to type simple command like: `make all`, `make build` or `make docker`.
