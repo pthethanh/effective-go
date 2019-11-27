@@ -624,6 +624,8 @@ if err != nil {
 	return errors.Wrap(err, "failed to open foo.txt")
 }
 ```
+
+If you are using Go 1.13 afterward, better look at https://blog.golang.org/go1.13-errors. It offers a very nice way to wrap, check error.
 ## Avoid global variables
 
 Global variables make testing and readability hard. It also makes everyone in the same package can access it even they don't need it and should not able to access to it. The best practice is to set it as a dependency of a struct and use dependency injection to inject it whenever you need it (often in main.go)
