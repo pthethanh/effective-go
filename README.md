@@ -2,10 +2,6 @@ This page collects common comments made during reviews of Go code and some best 
 
 You can view this as a supplement to [Effective Go](https://golang.org/doc/effective_go.html).
 
-**Table of contents**
-
-[TOC]
-
 ## Gofmt
 
 Run [gofmt](https://golang.org/cmd/gofmt/) on your code to automatically fix the majority of mechanical style issues. Almost all Go code in the wild uses `gofmt`. The rest of this document addresses non-mechanical style points.
@@ -664,6 +660,15 @@ func (h *Handlers) DropHandler(w http.ResponseWriter, r *http.Request) {
 	h.DB.Exec("DROP DATABASE prod")
 }
 ```
+
+## Project Structure/Layout
+
+It's always a good idea to structure your code to make it readable and extensible.
+If you're writing a libraries for other to use, source code of the Go SDK is a good place to look at. But if you are writing an application which composed of different modules, it's recommended to look at [go-project-layout]( https://github.com/golang-standards/project-layout). A sample implementation of the layout can be found at the [robusta-project](https://github.com/pthethanh/robusta).
+
+*For beginner: A simple approach to check if you have a good code, good design is to write unit test for your code. Most beginner write their code and cannot even write unit test for their code because of complexity of the code/design, especially when external dependencies such as database, mail, message queue, ....  are needed.
+
+
 
 ## References
 
