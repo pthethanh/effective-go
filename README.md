@@ -336,7 +336,7 @@ This is, actually, exactly the same advice about how long a function should be. 
 
 See <https://golang.org/doc/effective_go.html#mixed-caps>. This applies even when it breaks conventions in other languages. For example an unexported constant is `maxLength` not `MaxLength` or `MAX_LENGTH`.
 
-Also see [Initialisms](https://github.com/golang/go/wiki/CodeReviewComments#initialisms).
+Also see [Initialisms](https://github.com/golang/go/wiki/CodeReviewComments#initialisms) and [Naming Conventions](https://pthethanh.herokuapp.com/blog/articles/golang-name-conventions)
 
 ## Named Result Parameters
 
@@ -441,7 +441,7 @@ See <https://golang.org/doc/effective_go.html#commentary> for more information a
 
 ## Package Names
 
-All references to names in your package will be done using the package name, so you can omit that name from the identifiers. For example, if you are in package chubby, you don't need type ChubbyFile, which clients will write as `chubby.ChubbyFile`. Instead, name the type `File`, which clients will write as `chubby.File`. Avoid meaningless package names like util, common, misc, api, types, and interfaces. See <http://golang.org/doc/effective_go.html#package-names> and<http://blog.golang.org/package-names> for more.
+All references to names in your package will be done using the package name, so you can omit that name from the identifiers. For example, if you are in package chubby, you don't need type ChubbyFile, which clients will write as `chubby.ChubbyFile`. Instead, name the type `File`, which clients will write as `chubby.File`. Avoid meaningless package names like util, common, misc, api, types, and interfaces. See <http://golang.org/doc/effective_go.html#package-names>, <http://blog.golang.org/package-names> and [Naming Conventions](https://pthethanh.herokuapp.com/blog/articles/golang-name-conventions) for more.
 
 ## Pass Values
 
@@ -500,6 +500,8 @@ In any case, the onus is on you to fail with a helpful message to whoever's debu
 Variable names in Go should be short rather than long. This is especially true for local variables with limited scope. Prefer `c` to `lineCount`. Prefer `i` to `sliceIndex`.
 
 The basic rule: the further from its declaration that a name is used, the more descriptive the name must be. For a method receiver, one or two letters is sufficient. Common variables such as loop indices and readers can be a single letter (`i`, `r`). More unusual things and global variables need more descriptive names.
+
+See also [Naming Conventions](https://pthethanh.herokuapp.com/blog/articles/golang-name-conventions)
 
 ## Use Makefile for common commands
 
